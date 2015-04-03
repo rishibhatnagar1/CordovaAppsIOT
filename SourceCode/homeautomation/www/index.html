@@ -26,12 +26,13 @@
     <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
     <link rel="stylesheet" type="text/css" href="css/index.css" />
-        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <!-- Include jQuery Mobile stylesheets -->
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
 
     <!-- Include the jQuery library -->
     <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="http://cdn.socket.io/socket.io-1.0.3.js"></script>
 
     <!-- Include the jQuery Mobile library -->
     <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
@@ -39,7 +40,30 @@
 </head>
 
 <body>
+    <style type="text/css">
+        #stream {
+            height: auto;
+            margin: 0px auto;
+            display: block;
+            margin-top: 0px;
+            width: 100%;
+        }
+    </style>
+   
     <script type="text/javascript">
+        serverroot = "https://young-basin-1083.herokuapp.com/";
+        //serverroot ="http://localhost:4000/"
+        var socket = io(serverroot);
+        socket.on('liveStream', function (url) {
+            $('#stream').attr('src', serverroot + url);
+            //$('.start').hide();
+        });
+        startStream();
+
+        function startStream() {
+            socket.emit('start-stream');
+            //$('.start').hide();
+        }
         $(document).ready(function () {
             $('#open').click(function () {
                 sendToServer("Y");
@@ -88,7 +112,7 @@
         }
 
         function recognizeSpeech() {
-            //alert("I'm here");
+                //alert("I'm here");
                 var maxMatches = 5;
                 var promptString = "Speak now"; // optional
                 var language = "en-US"; // optional
@@ -123,12 +147,9 @@
     <!-- Call the image using javascript here -->
     <div class="container-fluid" id="NewThings">
         <div class="row">
-            <div class="col-sm-4"></div>
-            <div class="col-sm-4">
-                <img src="https://young-basin-1083.herokuapp.com/images?value=intruder.jpg">
-
+            <div class="col-sm-12">
+                <img src="" id="stream">
             </div>
-            <div class="col-sm-4"></div>
         </div>
         <div class="row">
             <div class="col-sm-4"></div>
